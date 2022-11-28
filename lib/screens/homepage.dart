@@ -63,6 +63,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> getInputtext() async {
     await showModalBottomSheet(
+        backgroundColor: Color.fromARGB(255, 168, 231, 229),
         isScrollControlled: true,
         context: context,
         builder: (BuildContext ctx) {
@@ -94,7 +95,9 @@ class _HomePageState extends State<HomePage> {
                 ElevatedButton(
                   child: const Text('Add'),
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: Constants.themeColor),
+                    elevation: 10,
+                    backgroundColor: Constants.themeColor,
+                  ),
                   onPressed: () {
                     saveData();
                     _titleController.text = '';
@@ -167,6 +170,7 @@ class _HomePageState extends State<HomePage> {
       _descController.text = taskdesc;
     }
     await showModalBottomSheet(
+        backgroundColor: Color.fromARGB(255, 168, 231, 229),
         isScrollControlled: true,
         context: context,
         builder: (BuildContext ctx) {
@@ -198,7 +202,7 @@ class _HomePageState extends State<HomePage> {
                 ElevatedButton(
                   child: const Text('Update'),
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: Constants.themeColor),
+                      elevation: 10, backgroundColor: Constants.themeColor),
                   onPressed: () {
                     updateData(id, owner);
                     _titleController.text = '';
@@ -245,6 +249,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Color.fromARGB(255, 168, 231, 229),
         floatingActionButton: FloatingActionButton(
           backgroundColor: Constants.themeColor,
           onPressed: () {
@@ -255,20 +260,42 @@ class _HomePageState extends State<HomePage> {
           child: Icon(Icons.add),
         ),
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           backgroundColor: Constants.themeColor,
           actions: [
             IconButton(onPressed: () {}, icon: Icon(Icons.person)),
             IconButton(
-                onPressed: () async {
-                  SharedPreferences prefs =
-                      await SharedPreferences.getInstance();
-                  prefs.remove('email');
-                  prefs.remove('username');
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext ctx) => SignIn()));
-                },
+                onPressed: () => showDialog<String>(
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                        backgroundColor: Color.fromARGB(255, 168, 231, 229),
+                        title: const Text('Log out'),
+                        content: const Text('Are you sure to log out?'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, 'Cancel'),
+                            child: const Text('Cancel',
+                                style: TextStyle(color: Colors.black)),
+                          ),
+                          TextButton(
+                            onPressed: () async {
+                              SharedPreferences prefs =
+                                  await SharedPreferences.getInstance();
+                              prefs.remove('email');
+                              prefs.remove('username');
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (BuildContext ctx) => SignIn()));
+                            },
+                            child: const Text(
+                              'Exit',
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                 icon: Icon(Icons.exit_to_app))
           ],
           title: Text("Welcome ${widget.username}!"),
@@ -291,6 +318,7 @@ class _HomePageState extends State<HomePage> {
                           itemCount: usertodo.length,
                           itemBuilder: (context, index) {
                             return Card(
+                              color: Color.fromARGB(255, 164, 244, 242),
                               elevation: 20,
                               child: Padding(
                                 padding: const EdgeInsets.all(10.0),
@@ -317,6 +345,7 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         ElevatedButton(
                                             style: ElevatedButton.styleFrom(
+                                              elevation: 10,
                                               backgroundColor:
                                                   Constants.themeColor,
                                             ),
@@ -355,13 +384,50 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         IconButton(
                                             color: Constants.themeColor,
-                                            onPressed: () {
-                                              setState(() {
-                                                deleteAlbum(snapshot
-                                                    .data![index].id
-                                                    .toString());
-                                              });
-                                            },
+                                            onPressed: () => showDialog<String>(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) =>
+                                                          AlertDialog(
+                                                    backgroundColor:
+                                                        Color.fromARGB(
+                                                            255, 168, 231, 229),
+                                                    title: const Text(
+                                                        'Delete Task'),
+                                                    content: const Text(
+                                                        'Are you sure?'),
+                                                    actions: <Widget>[
+                                                      TextButton(
+                                                        onPressed: () =>
+                                                            Navigator.pop(
+                                                                context,
+                                                                'Cancel'),
+                                                        child: const Text(
+                                                            'Cancel',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .black)),
+                                                      ),
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          setState(() {
+                                                            deleteAlbum(snapshot
+                                                                .data![index].id
+                                                                .toString());
+                                                          });
+                                                          Navigator.pop(
+                                                              context, 'ok');
+                                                        },
+                                                        child: const Text(
+                                                          'Yes',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.black),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
                                             icon: Icon(Icons.delete))
                                       ],
                                     ),

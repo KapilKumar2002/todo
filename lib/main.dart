@@ -11,7 +11,6 @@ Future<void> main() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var email = prefs.getString('email');
   var username = prefs.getString('username');
-  print(email);
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
